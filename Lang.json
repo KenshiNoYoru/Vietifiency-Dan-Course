@@ -1,0 +1,71 @@
+{
+    "title": "Vietifiency Dan Course",
+    "titledumb": "Vietifiency - Foundation",
+    "titleez": "Vietifiency Dan Course - Beginner",
+    "titlenm": "Vietifiency Dan Course - Advanced",
+    "titlehd": "Vietifiency Dan Course - Extension",
+    "titleex": "Vietifiency Dan Course - Insane",
+    "description": "A short course guide you to the Vietnamese Language",
+    
+    "placeholder_entry1": "Please enter your username",
+    
+    "submitButton": "Submit",
+    "translateButton": "Translate text",
+    "goBackButton_Menu": ["Go Back", "Script MT Bold" ,60],
+    "goBackButton": ["Quay lại", "Go Back", "גב"],
+    "startButton": "Start",
+    "exitButton": "Exit",
+    "optionsButton": "Setting/options",
+    "medbut": ["Ok,\nBắt đầu nào", "Ok let's start"],
+    "easybut": ["Sẵn sàng!", "Ready"],
+    "newbieBut": ["Bắt đầu nào", "Get start"],
+    "hdbut": ["Đi nào!", "Let's go"],
+    "insanebut": ["להתחיל", "start"],
+
+    "easyMode": "Easy 😊",
+    "mediumMode": "Medium 🤔",
+    "hardMode": "Hard 😧",
+    "insaneMode": "Insane 👿",
+    "newbieMode": "Newbie 😇",
+
+    "start_label": "Where do you want to start ?\nPlease select your difficult",
+    "dumb": "New to Vietnamese ?",
+    "easysel": ["Phần này sẽ có 20 câu hỏi\nBạn sẽ cần hoành thành nó với 96% hoặc hơn để vượt qua phần này\nBạn đã sẵn sàng chưa?", "This section will have 20 questions,\n you will need to achieve 96% or more in order to pass this section.\nAre you ready?"],
+    "medsel": ["Phần này sẽ có 40 câu hỏi,\nbạn sẽ cần phải đạt được 90% trở lên để vượt qua phần này.\nBạn đã sẵn sàng chưa?", "This section will have 40 questions,\n you will need to achieve 90% or more in order to pass this section.\nAre you ready ?"],
+    "hdsel": ["Phần này sẽ có 60 câu hỏi,\nbạn sẽ cần phải đạt được 90% trở lên để vượt qua phần này.\nChúc may mắn", "This section will have 60 questions,\n you will need to achieve 90% or more in order to pass this section.\nGood luck"],
+    "dumbsel": ["Phần này đi qua khái niệm rất cơ bản của tiếng Việt,\n như câu, giọng điệu và cách phát âm.\nBạn đã sãn sàn chưa?", "This section go through the very basic concept of Vietnamese,\n such as sentence, tone and pronunciation.\nAre you ready?"],
+    "insaneel": ["אתה צריך ללכת לגיהינום, הנחות, להרוג את עצמך", "You may get some help from vietnamese people :)"],
+    
+    "easydiff": "Suitable for\nnewcommer\nLearn the basic\nsentence structure\nand words.",
+    "meddiff": "Suitable for\ncontinuer from the basic.\nMore advanced\nsentence structure\nand vocabulary.",
+    "harddiff": "Suitable for \nadvanced learners.\nThings will be\nmore challenging\nfrom here.",
+
+
+
+    
+    "ques" : [
+        "1.What is 'Hello' in Vietnamese ?",
+        "2.Translate 'Bạn khoẻ không ?' into English ?",
+        "3.Choose the best response for 'Chào buổi sáng, hôm nay bạn thế nào ?",
+        "4.Choose the correct answer to complete the sentence '________, tôi là\nMinh,rất vui được làm quen!",
+        "5.Which sentence is the correct translation for 'Xin lỗi, tôi là người Việt'",
+        "6.'Hôm nay trời nắng quá' - What does this person say ?",
+        "7.Choose the correct letter to complete the word: 'H_m nay'(Today)",
+        "8.Choose the correct letter to complete the word: 'Vui v_'(Happy)"
+        ],
+    
+        "options" : [
+        ["Tạm biệt", "Bạn khoẻ không", "Xin chào", "Buổi sáng"],
+        ["Good morning","How are you","Thank you","I'm fine"],
+        ["Tôi ổn, bạn thì sao", "Hẹn ngày mai gặp lại", "Xin chào", "Tạm biệt nha, tôi đi trước"],
+        ["Tạm biệt","Buổi tối","Ngày mai","Xin chào"],
+        ["Sorry, I am Australian","Excuse me, I am Vietnamese","Sorry, I am not American","How are you today"],
+        ["It's so rainy!", "It's so sunny!", "It's so sunny today!", "What's the weather like today"],
+        ["a", "ư", "ê", "ô"],
+        ["ẻ", "ở", "ả", "ủ"]
+        ],
+    
+        "ans" : [ 3, 2, 1, 4, 2, 3, 4, 1]
+
+    ,"bandai": "Bring back dragon momoco\nBandai Shit\n"
+}
