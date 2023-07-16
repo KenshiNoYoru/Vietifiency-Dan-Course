@@ -8,17 +8,22 @@ from threading import Thread
 import socket
 import time
 
-#LoadSetting
+
 with open("user_setting.json", 'r') as data_unloaded:
     data_loaded = json.load(data_unloaded)
     if data_loaded["Appearance"] == "Dark":
         set_appearance_mode("dark")
     elif data_loaded["Appearance"] == "White":
         set_appearance_mode("light")
-#end
 
 with open("Lang.json", encoding='utf-8') as f:
+    global lang
     lang = json.load(f)
+
+with open("foundation.json", encoding='utf-8') as fA1:
+    global foundation
+    foundation = json.load(fA1)
+
 q = (lang['ques'])
 options = (lang['options'])
 a = (lang['ans'])
@@ -28,13 +33,14 @@ root.title(lang['title'])
 root.geometry("1386x720")
 count = 0
 root.resizable(0, 0)
+root.iconbitmap(".\\Resource\\Icon.ico")
 
 Menu_Frame = CTkFrame(root, width= 1290, height= 600)
 Menu_Frame.pack()
 Menu_Frame.place(x = 50, y= 30)
 Menu_Frame.propagate(False)
 
-MenuTitle_label = CTkLabel(Menu_Frame, text= lang["title"], font= ("Script MT Bold", 60), bg_color = "transparent")
+MenuTitle_label = CTkLabel(Menu_Frame, text= lang["title"], font= ("Times new roman", 60), bg_color = "transparent")
 MenuTitle_label.pack()
 MenuTitle_label.place(x = 360, y = 20)
 
@@ -139,7 +145,7 @@ def Verify_Form():
             difficulty()
             Verify_Frame.destroy()
 
-    submitButton = CTkButton(Verify_Frame, width= 150, height= 50, text = lang["submitButton"], font= ("script mt bold", 30), command= lambda: check())
+    submitButton = CTkButton(Verify_Frame, width= 150, height= 50, text = lang["submitButton"], font= ("Times new roman", 30), command= lambda: check())
     submitButton.pack()
     submitButton.place(x = 550, y = 450)
             
@@ -171,14 +177,14 @@ def difficulty():
         difficulty_frame.place(x = 50, y= 30)
         difficulty_frame.propagate(False)
         
-        difficult_select = CTkLabel(difficulty_frame, width= 200, height= 50, text= name + lang["start_label"], text_color= "White", fg_color= "Grey", font= ("script mt bold", 50), corner_radius= 7, bg_color= "transparent")
+        difficult_select = CTkLabel(difficulty_frame, width= 200, height= 50, text= name + lang["start_label"], text_color= "White", fg_color= "Grey", font= ("Times new roman", 50), corner_radius= 7, bg_color= "transparent")
         difficult_select.pack()
         difficult_select.place(x= 350, y = 25)
         
-        difficult_newbie = CTkLabel(difficulty_frame, width= 200, height= 80, text= lang["dumb"], font= ("script mt bold", 20), corner_radius= 7, bg_color= "transparent", fg_color= "Cyan", text_color= ("black", "#424343"))
-        difficult_easy = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["easydiff"], font= ("script mt bold", 30), corner_radius= 7, bg_color= "transparent", fg_color= "Green", text_color= ("black", "#424343"))
-        difficult_medium = CTkLabel(difficulty_frame, width= 290, height= 200, text= lang["meddiff"], font= ("script mt bold", 30), corner_radius= 7, bg_color= "transparent", fg_color= "Yellow", text_color= ("black", "#424343"))
-        difficult_hard = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["harddiff"], font= ("script mt bold", 30), corner_radius= 7, bg_color= "transparent", fg_color= "Red", text_color= ("black", "#424343"))
+        difficult_newbie = CTkLabel(difficulty_frame, width= 200, height= 80, text= lang["dumb"], font= ("Times new roman", 20, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Cyan", text_color= "black")
+        difficult_easy = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["easydiff"], font= ("Times new roman", 30, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Green", text_color= "black")
+        difficult_medium = CTkLabel(difficulty_frame, width= 290, height= 200, text= lang["meddiff"], font= ("Times new roman", 30, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Yellow", text_color= "black")
+        difficult_hard = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["harddiff"], font= ("Times new roman", 30, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Red", text_color= "black")
 
         difficult_newbie.pack()
         difficult_easy.pack()
@@ -232,14 +238,14 @@ def back_sel():
         difficulty_frame.place(x = 50, y= 30)
         difficulty_frame.propagate(False)
         
-        difficult_select = CTkLabel(difficulty_frame, width= 200, height= 50, text= name + lang["start_label"], text_color= "White", fg_color= "Grey", font= ("script mt bold", 50), corner_radius= 7, bg_color= "transparent")
+        difficult_select = CTkLabel(difficulty_frame, width= 200, height= 50, text= name + lang["start_label"], text_color= "White", fg_color= "Grey", font= ("Times new roman", 50), corner_radius= 7, bg_color= "transparent")
         difficult_select.pack()
         difficult_select.place(x= 350, y = 25)
         
-        difficult_newbie = CTkLabel(difficulty_frame, width= 200, height= 80, text= lang["dumb"], font= ("script mt bold", 20), corner_radius= 7, bg_color= "transparent", fg_color= "Cyan", text_color= ("black", "#424343"))
-        difficult_easy = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["easydiff"], font= ("script mt bold", 30), corner_radius= 7, bg_color= "transparent", fg_color= "Green", text_color= ("black", "#424343"))
-        difficult_medium = CTkLabel(difficulty_frame, width= 290, height= 200, text= lang["meddiff"], font= ("script mt bold", 30), corner_radius= 7, bg_color= "transparent", fg_color= "Yellow", text_color=  ("black", "#424343"))
-        difficult_hard = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["harddiff"], font= ("script mt bold", 30), corner_radius= 7, bg_color= "transparent", fg_color= "Red", text_color=  ("black", "#424343"))
+        difficult_newbie = CTkLabel(difficulty_frame, width= 200, height= 80, text= lang["dumb"], font= ("Times new roman", 20, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Cyan", text_color= "black")
+        difficult_easy = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["easydiff"], font= ("Times new roman", 30, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Green", text_color= "black")
+        difficult_medium = CTkLabel(difficulty_frame, width= 290, height= 200, text= lang["meddiff"], font= ("Times new roman", 30, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Yellow", text_color=  "black")
+        difficult_hard = CTkLabel(difficulty_frame, width= 200, height= 200, text= lang["harddiff"], font= ("Times new roman", 30, "bold"), corner_radius= 7, bg_color= "transparent", fg_color= "Red", text_color=  "black")
 
         difficult_newbie.pack()
         difficult_easy.pack()
@@ -294,7 +300,7 @@ def selectedNewbie():
     notifyLabel.pack()
     notifyLabel.place(x = 330, y = 100)
     
-    startButton = CTkButton(beginner_frame, width= 140, height= 28, text= lang["newbieBut"][0], font= ("Times New Roman", 60), fg_color= ("cyan", "blue"), text_color= ("Black", "White"), command=lambda: print("Beta 1"))
+    startButton = CTkButton(beginner_frame, width= 140, height= 28, text= lang["newbieBut"][0], font= ("Times New Roman", 60), fg_color= ("cyan", "blue"), text_color= ("Black", "White"), command=lambda: Newbie_Mode())
     startButton.pack()
     startButton.place(x= 1024, y= 620)
     
@@ -313,8 +319,6 @@ def selectedNewbie():
     translateButton = CTkButton(beginner_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
     translateButton.pack()
     translateButton.place(x = 1000, y = 520)
-    
-
     
 def selectedEasyMode():
     global difficulty_frame
@@ -492,10 +496,197 @@ def selectedInsane():
         notifyLabel_4.configure(text= lang["insaneel"][1])
         backButton_4.configure(text= lang["goBackButton"][1])
     
-    translateButton_4 = CTkButton(insane_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
+    translateButton_4 = CTkButton(insane_frame, width= 140, height= 28, bg_color= "red", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
     translateButton_4.pack()
     translateButton_4.place(x = 1000, y = 520)
 
+def Newbie_Mode():
+    #Frame
+    global NB_Page1
+    global NB_Page2
+    global NB_Page3
+    global beginner_frame
+    global Newbie_Frame
+    global small_Newbie_Frame
+    global Newbie_Title_Mode
+    global Newbie_label_Mode
+    
+    beginner_frame.destroy()
+    
+    NB_Page1 = CTkFrame(root, width=1386, height= 1000, bg_color= "transparent")
+    NB_Page1.pack()
+    NB_Page1.propagate(False)
+    
+    Newbie_Frame = CTkFrame(NB_Page1, width= 1290, height= 600, corner_radius= 10)
+    Newbie_Frame.pack()
+    Newbie_Frame.place(x = 50, y = 20)
+    Newbie_Frame.propagate(False)
+    
+    #Move the location of the main window and increase it's height. 1386x100 = width and height, +350 and +0 = the location of the window
+    root.geometry("1386x1000+350+0")
+
+    small_Newbie_Frame = CTkFrame(NB_Page1, width= 1290, height= 200, corner_radius= 10)
+    small_Newbie_Frame.pack()
+    small_Newbie_Frame.place(x = 50, y = 700)
+    small_Newbie_Frame.propagate(False)
+    
+    #Question or label
+    Newbie_Title_Mode = CTkLabel(Newbie_Frame, font= ("Times New Roman", 40), bg_color= "transparent", text_color= ("Black", "White"), text= "Newbie session")
+    Newbie_Title_Mode.pack()
+    
+    Newbie_label_Mode = CTkLabel(Newbie_Frame, font= ("Times New Roman", 40), bg_color= ("Grey", "White"), text_color= ("White", "Black"), text= foundation["theAlphabet"], width= 1024, height= 320)
+    Newbie_label_Mode.pack()
+    Newbie_label_Mode.place(x= 150,y= 150)
+    
+    
+    class Sound:
+        pygame.mixer.init()
+        def play_sound1():
+            pygame.mixer.music.load("./\\Sound\\Letters\\A.mp3")
+            pygame.mixer.music.play()  
+        def play_sound2():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Ă.mp3")
+            pygame.mixer.music.play() 
+        def play_sound3():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Â.mp3")
+            pygame.mixer.music.play()
+        def play_sound4(): 
+            pygame.mixer.music.load("./\\Sound\\Letters\\B.mp3")
+            pygame.mixer.music.play()  
+        def play_sound5():
+            pygame.mixer.music.load("./\\Sound\\Letters\\C.mp3")
+            pygame.mixer.music.play() 
+        def play_sound6():
+            pygame.mixer.music.load("./\\Sound\\Letters\\D.mp3")
+            pygame.mixer.music.play()
+        def play_sound7():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Đ.mp3")
+            pygame.mixer.music.play()  
+        def play_sound8():
+            pygame.mixer.music.load("./\\Sound\\Letters\\E.mp3")
+            pygame.mixer.music.play() 
+        def play_sound9():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Ê.mp3")
+            pygame.mixer.music.play()  
+        def play_sound10():
+            pygame.mixer.music.load("./\\Sound\\Letters\\G.mp3")
+            pygame.mixer.music.play()  
+        def play_sound11():
+            pygame.mixer.music.load("./\\Sound\\Letters\\H.mp3")
+            pygame.mixer.music.play() 
+        def play_sound12(): 
+            pygame.mixer.music.load("./\\Sound\\Letters\\I.mp3")
+            pygame.mixer.music.play()  
+        def play_sound13():
+            pygame.mixer.music.load("./\\Sound\\Letters\\K.mp3")
+            pygame.mixer.music.play()  
+        def play_sound14():
+            pygame.mixer.music.load("./\\Sound\\Letters\\L.mp3")
+            pygame.mixer.music.play() 
+        def play_sound15():
+            pygame.mixer.music.load("./\\Sound\\Letters\\M.mp3")
+            pygame.mixer.music.play()  
+        def play_sound16():
+            pygame.mixer.music.load("./\\Sound\\Letters\\N.mp3")
+            pygame.mixer.music.play()  
+        def play_sound17():
+            pygame.mixer.music.load("./\\Sound\\Letters\\O.mp3")
+            pygame.mixer.music.play() 
+        def play_sound18():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Ô.mp3")
+            pygame.mixer.music.play()
+        def play_sound19():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Ơ.mp3")
+            pygame.mixer.music.play()
+        def play_sound20():
+            pygame.mixer.music.load("./\\Sound\\Letters\\P.mp3")
+            pygame.mixer.music.play()
+        def play_sound21():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Q.mp3")
+            pygame.mixer.music.play()
+        def play_sound22():
+            pygame.mixer.music.load("./\\Sound\\Letters\\R.mp3")
+            pygame.mixer.music.play() 
+        def play_sound23():
+            pygame.mixer.music.load("./\\Sound\\Letters\\S.mp3")
+            pygame.mixer.music.play()
+        def play_sound24():
+            pygame.mixer.music.load("./\\Sound\\Letters\\T.mp3")
+            pygame.mixer.music.play() 
+        def play_sound25():
+            pygame.mixer.music.load("./\\Sound\\Letters\\U.mp3")
+            pygame.mixer.music.play()
+        def play_sound26():
+            pygame.mixer.music.load("./\\Sound\\Letters\\Ư.mp3")
+            pygame.mixer.music.play() 
+        def play_sound27():
+            pygame.mixer.music.load("./\\Sound\\Letters\\V.mp3")
+            pygame.mixer.music.play()
+        def play_sound28():
+            pygame.mixer.music.load("./\\Sound\\Letters\\X.mp3")
+            pygame.mixer.music.play() 
+        def play_sound29(): 
+            pygame.mixer.music.load("./\\Sound\\Letters\\Y.mp3")
+            pygame.mixer.music.play()
+        
+    sound = Sound
+    
+    #Button and Page
+    global Next_Button
+    global A1_Button
+    global A2_Button
+    global A3_Button
+    global B_Button
+    global C_Button
+    global D1_Button
+    global D2_Button
+    global E1_Button
+    global E2_Button
+    
+    letter = foundation["Letters"]
+    
+    def Next_Page_1():
+        NB_Page1.destroy()
+        NB_Page2 = CTkFrame(root, width=1386, height= 1000, bg_color= "transparent")
+        NB_Page2.pack()
+        NB_Page2.propagate(False)
+        
+        Frame1 = CTkFrame(NB_Page2, width= 1286, height= 100)
+        Frame2 = CTkFrame(NB_Page2, width= 1286, height = 300)
+        Frame3 = CTkFrame(NB_Page2, width= 1286, height= 300)
+        
+        Title = CTkLabel(mg)
+        Vowel_Label = CTkLabel()
+        Non_Vowel_Label =  CTkLabel()
+        
+        Frame1.pack()
+        Frame2.pack()
+        Frame3.pack()
+        
+        Frame1.place(x = 50, y= 30)
+        Frame2.place(x = 50, y= 200)
+        Frame3.place(x = 50, y= 560)
+        
+    
+    Next_Button = CTkButton(NB_Page1, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= "black", text= lang["NextBut"],command= lambda: Next_Page_1())
+    Next_Button.pack()
+    Next_Button.place(x = 1160, y = 940)
+    
+    A1_Button = CTkButton(small_Newbie_Frame, width= 200, height= 100, text= letter[0], bg_color= "transparent", fg_color= "red", corner_radius= 7, font= ("Times new roman", 32), command= lambda: sound.play_sound1())
+    A2_Button = CTkButton(small_Newbie_Frame, width= 200, height= 100, text= letter[1], bg_color= "transparent", fg_color= "red", corner_radius= 7, font= ("Times new roman", 32), command= lambda: sound.play_sound2())
+    A3_Button = CTkButton(small_Newbie_Frame, width= 200, height= 100, text= letter[2], bg_color= "transparent", fg_color= "red", corner_radius= 7, font= ("Times new roman", 32), command= lambda: sound.play_sound3())
+    
+    A1_Button.pack()
+    A2_Button.pack()
+    A3_Button.pack()
+    
+    A1_Button.place(x= 20, y = 50)
+    A2_Button.place(x= 520, y = 50)
+    A3_Button.place(x= 1000, y = 50)
+    
+    
+    
+#Easy Mode
 def start_quiz_easy():
     global beginner_frame
     global easy_frame
@@ -503,31 +694,29 @@ def start_quiz_easy():
     global hard_frame
     global insane_frame
 
+    #Remove Frame
     try:
         beginner_frame.destroy()
     except:
         pass
-    
     try:
         easy_frame.destroy()
     except:
         pass
-    
     try:
         medium_frame.destroy()
     except:
         pass
-    
     try:
         hard_frame.destroy()
     except:
         pass
-    
     try:
         insane_frame.destroy()
     except:
         pass
-    
+    #___________________________    
+
     class Quiz:
         def __init__(self):
             self.qn = 0
@@ -539,10 +728,10 @@ def start_quiz_easy():
             self.correct = 0
 
         def question(self, qn):
-            t = Label(root, text=lang['titleez'], bg="red", font=('Script MT Bold', 50, "underline"))
+            t = Label(root, text=lang['titleez'], bg="red", font=('Times new roman', 50, "underline"))
             t.place(x=220, y=50)
             global qn_label
-            qn_label = Label(root, text=q[qn], font=("Script MT Bold", 30), bg="red")
+            qn_label = Label(root, text=q[qn], font=("Times new roman", 30), bg="red")
             qn_label.place(x=50, y=180)
             return qn_label
 
@@ -574,9 +763,9 @@ def start_quiz_easy():
 
         def buttons(self):
             global checkbutt
-            checkbutt = Button(root, text="Next",command=self.ans_check, bg="green",fg="white",font=("Script MT Bold", 20))
+            checkbutt = Button(root, text="Next",command=self.ans_check, bg="green",fg="white",font=("Times new roman", 20))
             checkbutt.place(x=200,y=590)
-            quitbutton = Button(root, text="Quit", command=root.destroy, bg="red",fg="white", font=("Script MT Bold", 20))
+            quitbutton = Button(root, text="Quit", command=root.destroy, bg="red",fg="white", font=("Times new roman", 20))
             quitbutton.place(x=380,y=590)
 
         def checkans(self, qn):
@@ -589,13 +778,13 @@ def start_quiz_easy():
            global checkbutt
            global nbutton
            checkbutt.destroy()
-           nbutton = Button(root, text="Next",command=self.nextbtn, bg="green",fg="white",font=("Script MT Bold", 20))
+           nbutton = Button(root, text="Next",command=self.nextbtn, bg="green",fg="white",font=("Times new roman", 20))
            nbutton.place(x=200,y=590)
            self.tick_correct_answer(self.qn)
         
         def nextbtn(self):
            global checkbutt
-           checkbutt = Button(root, text="Next",command=self.ans_check, bg="green",fg="white",font=("Script MT Bold", 20))
+           checkbutt = Button(root, text="Next",command=self.ans_check, bg="green",fg="white",font=("Times new roman", 20))
            checkbutt.place(x=200,y=590)
            if self.checkans(self.qn):
              self.correct += 1

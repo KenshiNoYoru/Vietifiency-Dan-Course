@@ -11,7 +11,7 @@
     
     "submitButton": "Submit",
     "translateButton": "Translate text",
-    "goBackButton_Menu": ["Go Back", "Script MT Bold" ,60],
+    "goBackButton_Menu": ["Go Back", "Times new roman" ,60],
     "goBackButton": ["Quay lại", "Go Back", "גב"],
     "startButton": "Start",
     "exitButton": "Exit",
@@ -21,6 +21,7 @@
     "newbieBut": ["Bắt đầu nào", "Get start"],
     "hdbut": ["Đi nào!", "Let's go"],
     "insanebut": ["להתחיל", "start"],
+    "NextBut": "Next",
 
     "easyMode": "Easy 😊",
     "mediumMode": "Medium 🤔",
@@ -50,8 +51,8 @@
         "4.Choose the correct answer to complete the sentence '________, tôi là\nMinh,rất vui được làm quen!",
         "5.Which sentence is the correct translation for 'Xin lỗi, tôi là người Việt'",
         "6.'Hôm nay trời nắng quá' - What does this person say ?",
-        "7.Choose the correct letter to complete the word: 'H_m nay'(Today)",
-        "8.Choose the correct letter to complete the word: 'Vui v_'(Happy)"
+        "7.Choose the correct Letters to complete the word: 'H_m nay'(Today)",
+        "8.Choose the correct Letters to complete the word: 'Vui v_'(Happy)"
         ],
     
         "options" : [
