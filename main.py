@@ -5,22 +5,22 @@ import json
 from xml.etree.ElementTree import QName
 import pygame
 from threading import Thread
-import socket
-import time
+from time import time
 
+print(f"This program run in: {time()}")
 
-with open("user_setting.json", 'r') as data_unloaded:
+with open("Json\\user_setting.json", 'r') as data_unloaded:
     data_loaded = json.load(data_unloaded)
     if data_loaded["Appearance"] == "Dark":
         set_appearance_mode("dark")
     elif data_loaded["Appearance"] == "White":
         set_appearance_mode("light")
 
-with open("Lang.json", encoding='utf-8') as f:
+with open("Json\\Lang.json", encoding='utf-8') as f:
     global lang
     lang = json.load(f)
 
-with open("foundation.json", encoding='utf-8') as fA1:
+with open("Json\\foundation.json", encoding='utf-8') as fA1:
     global foundation
     foundation = json.load(fA1)
 
@@ -33,7 +33,7 @@ root.title(lang['title'])
 root.geometry("1386x720")
 count = 0
 root.resizable(0, 0)
-root.iconbitmap(".\\Resource\\Icon.ico")
+root.iconbitmap(".\\Resource\\Iconv2.ico")
 
 Menu_Frame = CTkFrame(root, width= 1290, height= 600)
 Menu_Frame.pack()
@@ -51,7 +51,7 @@ def options_Form():
     Appearance_var = IntVar(value= 0)
     
     #LoadSetting
-    with open("user_setting.json", 'r') as data_unloaded:
+    with open("Json\\user_setting.json", 'r') as data_unloaded:
         data_loaded = json.load(data_unloaded)
         if data_loaded["Appearance"] == "Dark":
             Appearance_var.set(1)
@@ -75,20 +75,20 @@ def options_Form():
     Back_Button.place(x= 1040, y= 520)
     
     def checkAppearance_Mode():
-        with open("user_setting.json", 'r') as data_unread:
+        with open("Json\\user_setting.json", 'r') as data_unread:
             data = json.load(data_unread)
             if data["Appearance"] == "White":
                 set_appearance_mode("dark")
                 data["Appearance"] = "Dark"
                 print("Json Dump Dark")
-                with open("user_setting.json", 'w') as f:
+                with open("Json\\user_setting.json", 'w') as f:
                     json.dump(data, f)
                 Appearance_var.set(1)
             elif data["Appearance"] == "Dark":
                 set_appearance_mode("light")
                 data["Appearance"] = "White"
                 print("Json Dump White")
-                with open("user_setting.json", 'w') as f:
+                with open("Json\\user_setting.json", 'w') as f:
                     json.dump(data, f)
                 Appearance_var.set(0)
     Appearance = CTkSwitch(options_Frame, switch_width= 70, switch_height= 30, text= "Dark Mode", command=checkAppearance_Mode, variable= Appearance_var)
@@ -646,6 +646,14 @@ def Newbie_Mode():
     letter = foundation["Letters"]
     
     def Next_Page_1():
+        global Next_Button
+        global A2_Button_P2
+        global A3_Button_P2
+        global D2_Button_P2
+        global E2_Button_P2
+        global O2_Button_P2
+        global O3_Button_P2
+        
         NB_Page1.destroy()
         NB_Page2 = CTkFrame(root, width=1386, height= 1000, bg_color= "transparent")
         NB_Page2.pack()
@@ -655,17 +663,32 @@ def Newbie_Mode():
         Frame2 = CTkFrame(NB_Page2, width= 1286, height = 300)
         Frame3 = CTkFrame(NB_Page2, width= 1286, height= 300)
         
-        Title = CTkLabel(mg)
-        Vowel_Label = CTkLabel()
-        Non_Vowel_Label =  CTkLabel()
+        Frame1.propagate(False)
+        Frame2.propagate(False)
+        Frame3.propagate(False)
         
         Frame1.pack()
         Frame2.pack()
         Frame3.pack()
         
+        TitleLabel = CTkLabel(Frame1, bg_color = "transparent", text_color = ("black", "white"), text = lang["titledumb"], font = ("Times new roman", 60))
+        Vowel_Label = CTkLabel(NB_Page2, text = foundation["Vowel"][1], bg_color = "transparent", fg_color = "transparent", text_color = ("black", "white"), font = ("Times new roman", 20))
+        Non_Vowel_Label =  CTkLabel(NB_Page2, text = foundation["Vowel"][0], bg_color = "transparent", fg_color = "transparent", text_color = ("black", "white"), font = ("Times new roman", 20))
+        
+        TitleLabel.pack()
+        Vowel_Label.pack()
+        
+        Vowel_Label.place(x = 55, y = 165)
+        Non_Vowel_Label.place(x = 45, y = 525)
+        
         Frame1.place(x = 50, y= 30)
         Frame2.place(x = 50, y= 200)
         Frame3.place(x = 50, y= 560)
+        
+        #Vowel Letters
+        A1_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40))
+        A2_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40))
+        
         
     
     Next_Button = CTkButton(NB_Page1, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= "black", text= lang["NextBut"],command= lambda: Next_Page_1())

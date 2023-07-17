@@ -1,0 +1,52 @@
+{
+    "title": "Vietifiency Dan Course",
+    "titledumb": "Vietifiency - Foundation",
+    "titleez": "Vietifiency Dan Course - Beginner",
+    "titlenm": "Vietifiency Dan Course - Advanced",
+    "titlehd": "Vietifiency Dan Course - Extension",
+    "titleex": "Vietifiency Dan Course - Insane",
+    "description": "A short course guide you to the Vietnamese Language",
+    "username_label": "Username : ",
+    "start_label": "Where do you want to start ?",
+    "button_text": "Easy",
+    "button_textm": "Medium",
+    "button_texth": "Hard",
+    "button_textex": "Insane >>>",
+    "dumb": "New to Vietnamese ?",
+    "dumbstart": "Start here!",
+    "easysel": "This section will have 30 questions,\n you will need to achieve 96% or more in order to pass this section.\nBạn sẵn sàng chưa ?",
+    "medsel": "This section will have 40 questions,\n you will need to achieve 90% or more in order to pass this section.\nSẵn sàng rồi chứ ?",
+    "hdsel": "This section will have 40 questions,\n you will need to achieve 90% or more in order to pass this section.\nChúc may mắn!",
+    "dumbsel": "This section go through the very basic concept of Vietnamese,\n such as sentence, tone and pronunciation.\nBạn sẵn sàng chưa ?",
+    "easybut": "Sẵn sàng!",
+    "hdbut": "Đi nào!",
+    "easydiff": "Suitable for\nnewcommer\nLearn the basic\nsentence structure\nand words.",
+    "meddiff": "Suitable for\ncontinuer from the basic.\nMore advanced\nsentence structure\nand vocabulary.",
+    "harddiff": "Suitable for \nadvanced learners.\nThings will be\nmore challenging\nfrom here.",
+
+    "ques" : [
+        "1.What is 'Hello' in Vietnamese ?",
+        "2.Translate 'Bạn khoẻ không ?' into English ?",
+        "3.Choose the best response for 'Chào buổi sáng, hôm nay bạn thế nào ?",
+        "4.Choose the correct answer to complete the sentence '________, tôi là\nMinh,rất vui được làm quen!",
+        "5.Which sentence is the correct translation for 'Xin lỗi, tôi là người Việt'",
+        "6.'Hôm nay trời nắng quá' - What does this person say ?",
+        "7.Choose the correct letter to complete the word: 'H_m nay'(Today)",
+        "8.Choose the correct letter to complete the word: 'Vui v_'(Happy)"
+        ],
+    
+        "options" : [
+        ["Tạm biệt", "Bạn khoẻ không", "Xin chào", "Buổi sáng"],
+        ["Good morning","How are you","Thank you","I'm fine"],
+        ["Tôi ổn, bạn thì sao", "Hẹn ngày mai gặp lại", "Xin chào", "Tạm biệt nha, tôi đi trước"],
+        ["Tạm biệt","Buổi tối","Ngày mai","Xin chào"],
+        ["Sorry, I am Australian","Excuse me, I am Vietnamese","Sorry, I am not American","How are you today"],
+        ["It's so rainy!", "It's so sunny!", "It's so sunny today!", "What's the weather like today"],
+        ["a", "ư", "ê", "ô"],
+        ["ẻ", "ở", "ả", "ủ"]
+        ],
+    
+        "ans" : [ 3, 2, 1, 4, 2, 3, 4, 1]
+
+}
+  

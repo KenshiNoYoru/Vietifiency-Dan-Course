@@ -2,9 +2,9 @@
     "intro": "Welcome to your first step in exploring the language Vietnamese!",
     "intro1": "Vietnamese has almost the same alphabet system as English,\nso the good news is that\nyou don't need to start over from the alphabet when studying Vietnamese",
     "abcintro": "We will start first with how Vietnamese Letters is pronunced.\nClick on the sample to hear!",
-    "theAlphabet": "Here's the alphabet of Vietnamese:\nYou can click on each word to see how it's pronunced"
-
-    ,"Letters": [
+    "theAlphabet": "Here's the alphabet of Vietnamese:\nYou can click on each word to see how it's pronunced",
+    "Vowel": ["Vowel Characters", "Non-Vowel Characters"],
+    "Letters": [
         "A", "Ă", "Â",
         "B", "C", "D",
         "Đ", "E", "Ê",
@@ -15,5 +15,14 @@
         "S", "T", "U",
         "Ư", "V", "X",
         "Y" 
+    ],
+    "Non-Wovel_Letters":[
+        "U", "V", "X",
+        "Y"
+    ],
+    "Vowel_Letters": [
+        "Ă", "Â", "Đ",
+        "Ê", "Ô", "Ơ",
+        "Ư"
     ]
 }
