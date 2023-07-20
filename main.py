@@ -5,22 +5,22 @@ import json
 from xml.etree.ElementTree import QName
 import pygame
 from threading import Thread
-from time import time
+from time import time, sleep
 
 print(f"This program run in: {time()}")
 
-with open("Json\\user_setting.json", 'r') as data_unloaded:
+with open("Data\\user_setting.json", 'r') as data_unloaded:
     data_loaded = json.load(data_unloaded)
     if data_loaded["Appearance"] == "Dark":
         set_appearance_mode("dark")
     elif data_loaded["Appearance"] == "White":
         set_appearance_mode("light")
 
-with open("Json\\Lang.json", encoding='utf-8') as f:
+with open("Data\\Lang.json", encoding='utf-8') as f:
     global lang
     lang = json.load(f)
 
-with open("Json\\foundation.json", encoding='utf-8') as fA1:
+with open("Data\\foundation.json", encoding='utf-8') as fA1:
     global foundation
     foundation = json.load(fA1)
 
@@ -35,6 +35,14 @@ count = 0
 root.resizable(0, 0)
 root.iconbitmap(".\\Resource\\Iconv2.ico")
 
+#load_data_again
+with open("Data\\user_setting.json", 'r') as data_unloaded:
+    data_loaded = json.load(data_unloaded)
+    if data_loaded["Resizable"] == True:
+        root.resizable(1, 1)
+    elif data_loaded["Resizable"] == False:
+        root.resizable(0, 0)
+
 Menu_Frame = CTkFrame(root, width= 1290, height= 600)
 Menu_Frame.pack()
 Menu_Frame.place(x = 50, y= 30)
@@ -47,16 +55,26 @@ MenuTitle_label.place(x = 360, y = 20)
 def options_Form():
     global options_Frame
     global Appearance
+    global Resize
     global goBack
+
     Appearance_var = IntVar(value= 0)
+    Resize_Var = BooleanVar(value = False)
     
     #LoadSetting
-    with open("Json\\user_setting.json", 'r') as data_unloaded:
+    with open("Data\\user_setting.json", 'r') as data_unloaded:
         data_loaded = json.load(data_unloaded)
         if data_loaded["Appearance"] == "Dark":
             Appearance_var.set(1)
         elif data_loaded["Appearance"] == "White":
             Appearance_var.set(0)
+        
+        if data_loaded["Resizable"] == True:
+            Resize_Var.set(value = True)
+            root.resizable(1, 1)
+        elif data_loaded["Resizable"] == False:
+            Resize_Var.set(value = False)
+            root.resizable(0, 0)
     #end
     
     Menu_Frame.pack_forget()
@@ -66,35 +84,67 @@ def options_Form():
     options_Frame.propagate(False)
     
     def BringBackMenu():
+        global root
+        root.update()
         options_Frame.destroy()
         Menu_Frame.pack()
         Menu_Frame.place(x = 50, y= 30)
+        
     
-    Back_Button = CTkButton(options_Frame, text= lang["goBackButton_Menu"][0], font= (lang["goBackButton_Menu"][1], lang["goBackButton_Menu"][2]), command= BringBackMenu, )
+    Back_Button = CTkButton(options_Frame, text= lang["goBackButton_Menu"][0], font= (lang["goBackButton_Menu"][1], lang["goBackButton_Menu"][2]), command= BringBackMenu)
     Back_Button.pack()
     Back_Button.place(x= 1040, y= 520)
     
     def checkAppearance_Mode():
-        with open("Json\\user_setting.json", 'r') as data_unread:
+        with open("Data\\user_setting.json", 'r') as data_unread:
             data = json.load(data_unread)
             if data["Appearance"] == "White":
                 set_appearance_mode("dark")
                 data["Appearance"] = "Dark"
                 print("Json Dump Dark")
-                with open("Json\\user_setting.json", 'w') as f:
+                with open("Data\\user_setting.json", 'w') as f:
                     json.dump(data, f)
                 Appearance_var.set(1)
             elif data["Appearance"] == "Dark":
                 set_appearance_mode("light")
                 data["Appearance"] = "White"
                 print("Json Dump White")
-                with open("Json\\user_setting.json", 'w') as f:
+                with open("Data\\user_setting.json", 'w') as f:
                     json.dump(data, f)
                 Appearance_var.set(0)
+                
+    def check_Resizable():
+        with open("Data\\user_setting.json", 'r') as data_unread:
+            data = json.load(data_unread)
+            if data["Resizable"] == True:
+                root.resizable(0, 0)
+                data["Resizable"] = False
+                print("Resizable: On")
+                with open("Data\\user_setting.json", 'w') as f:
+                    json.dump(data, f)
+                Resize_Var.set(False)
+                
+            elif data["Resizable"] == False:
+                root.resizable(1, 1)
+                data["Resizable"] = True
+                print("Resizable: Off")
+                with open("Data\\user_setting.json", 'w') as f:
+                    json.dump(data, f)
+                Resize_Var.set(True)
+    
     Appearance = CTkSwitch(options_Frame, switch_width= 70, switch_height= 30, text= "Dark Mode", command=checkAppearance_Mode, variable= Appearance_var)
     Appearance.pack()
     Appearance.place(x = 0, y = 20)
     
+    Resize = CTkSwitch(options_Frame, switch_width= 70, switch_height= 30, text= "Resizable", command=check_Resizable, variable= Resize_Var)
+    Resize.pack()
+    Resize.place(x = 0, y = 90)
+
+#before start
+def At_Start():
+    global Device_Asking_Frame
+    Device_Asking_Frame = CTkFrame(root, width= 200, height= 450)
+
 def Verify_Form():
     global Verify_Frame
     global titleLabel
@@ -102,6 +152,7 @@ def Verify_Form():
     global usernameEntryBox
     global submitButton
     global name
+    global Back_Button_VF
     
     Menu_Frame.destroy()
     
@@ -116,9 +167,16 @@ def Verify_Form():
     titleLabel.pack()
     descriptionLabel.pack()
     
-    usernameEntryBox = CTkEntry(Verify_Frame, width= 700, height= 50, placeholder_text= lang["placeholder_entry1"], font= ("Arial", 30), fg_color= ("White", "#071e26"), text_color= ("Black", "White"))
+    usernameEntryBox = CTkEntry(Verify_Frame, width= 700, height= 50, placeholder_text= lang["placeholder_entry1"], font= ("Arial", 30), fg_color= "#071e26", text_color= "white")
     usernameEntryBox.pack()
     usernameEntryBox.place(x = 320, y = 250)
+
+    def back_mn_from_vf():
+        global root
+        root.update()
+        options_Frame.destroy()
+        Menu_Frame.pack()
+        Menu_Frame.place(x = 50, y= 30)
 
     def check():
         global Verify_Frame
@@ -130,16 +188,16 @@ def Verify_Form():
         
         if usernameEntryBox.get() == "":
             usernameEntryBox.configure(placeholder_text = "Please enter your name!", fg_color = 'red')
-            usernameEntryBox.configure(text_color = "red")
             titleLabel.focus()
             def count_down():
-                target= time.sleep(3)
-                usernameEntryBox.configure(placeholder_text = lang["placeholder_entry1"], fg_color = ("White", "#071e26"))
-                usernameEntryBox.configure(text_color = "black")
+                target= sleep(1.2)
+                usernameEntryBox.configure(placeholder_text = lang["placeholder_entry1"], fg_color= "#071e26", text_color= "white")
+                usernameEntryBox.configure(text_color = "white")
                 titleLabel.focus()
                 
             Thread(target= count_down).start()
             return
+        
         else:
             name = usernameEntryBox.get()
             difficulty()
@@ -170,7 +228,7 @@ def difficulty():
         name = lang["bandai"]
     else:
         name = "Greeting " + name + "!\n"
-    
+            
     if name:
         difficulty_frame = CTkFrame(root, width= 1290, height= 670)
         difficulty_frame.pack()
@@ -213,6 +271,24 @@ def difficulty():
         difficult_medium_button.place(x = 525, y= 440) 
         difficult_hard_button.place(x = 1020, y= 440) 
         difficulty_insane_button.place(x = 950, y= 550)
+        
+        #Load Data
+        with open("Data\\user_achievement.json") as data_unloaded:
+            data_loaded = json.load(data_unloaded)
+            if data_loaded["NewbieMode"] == True:
+                difficult_newbie_button.configure(text = lang["newbieMode"] + "✔")
+
+            if data_loaded["EasyMode"] == True:
+                difficult_easy_button.configure(text = lang["easyMode"] + "✔")
+                
+            if data_loaded["MediumMode"] == True:
+                difficult_medium_button.configure(text = lang["mediumMode"] + "✔")
+                
+            if data_loaded["HardMode"] == True:
+                difficult_hard_button.configure(text = lang["hardMode"] + "✔")
+
+            if data_loaded["InsaneMode"] == True:
+                difficulty_insane_button.configure(text = lang["insaneMode"] + "✔")
         
 def back_sel():
     global name
@@ -274,6 +350,24 @@ def back_sel():
         difficult_medium_button.place(x = 525, y= 440) 
         difficult_hard_button.place(x = 1020, y= 440) 
         difficulty_insane_button.place(x = 950, y= 550)
+        
+        #Load Data
+        with open("Data\\user_achievement.json") as data_unloaded:
+            data_loaded = json.load(data_unloaded)
+            if data_loaded["NewbieMode"] == True:
+                difficult_newbie_button.configure(text = lang["newbieMode"] + "✔")
+
+            if data_loaded["EasyMode"] == True:
+                difficult_easy_button.configure(text = lang["easyMode"] + "✔")
+                
+            if data_loaded["MediumMode"] == True:
+                difficult_medium_button.configure(text = lang["mediumMode"] + "✔")
+                
+            if data_loaded["HardMode"] == True:
+                difficult_hard_button.configure(text = lang["hardMode"] + "✔")
+
+            if data_loaded["InsaneMode"] == True:
+                difficulty_insane_button.configure(text = lang["insaneMode"] + "✔")
 
 def selectedNewbie():
     global difficulty_frame
@@ -300,7 +394,7 @@ def selectedNewbie():
     notifyLabel.pack()
     notifyLabel.place(x = 330, y = 100)
     
-    startButton = CTkButton(beginner_frame, width= 140, height= 28, text= lang["newbieBut"][0], font= ("Times New Roman", 60), fg_color= ("cyan", "blue"), text_color= ("Black", "White"), command=lambda: Newbie_Mode())
+    startButton = CTkButton(beginner_frame, width= 140, height= 28, text= lang["newbieBut"][0], font= ("Times New Roman", 60), fg_color= ("cyan", "blue"), text_color= ("black", "white"), command=lambda: Newbie_Mode())
     startButton.pack()
     startButton.place(x= 1024, y= 620)
     
@@ -316,7 +410,7 @@ def selectedNewbie():
         notifyLabel.configure(text= lang["dumbsel"][1])
         backButton.configure(text= lang["goBackButton"][1])
     
-    translateButton = CTkButton(beginner_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
+    translateButton = CTkButton(beginner_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("black", "white"), text= lang["translateButton"], command= lambda: translate())
     translateButton.pack()
     translateButton.place(x = 1000, y = 520)
     
@@ -345,7 +439,7 @@ def selectedEasyMode():
     notifyLabel_1.pack()
     notifyLabel_1.place(x = 330, y = 100)
     
-    startButton_1 = CTkButton(easy_frame, width= 140, height= 28, text= lang["easybut"][0], font= ("Times New Roman", 60), fg_color= ("cyan", "blue"), text_color= ("Black", "White"), command= lambda: start_quiz_easy())
+    startButton_1 = CTkButton(easy_frame, width= 140, height= 28, text= lang["easybut"][0], font= ("Times New Roman", 60), fg_color= ("cyan", "blue"), text_color= ("black", "white"), command= lambda: start_quiz_easy())
     startButton_1.pack()
     startButton_1.place(x= 1024, y= 620)
     
@@ -361,7 +455,7 @@ def selectedEasyMode():
         notifyLabel_1.configure(text= lang["dumbsel"][1])
         backButton_1.configure(text= lang["goBackButton"][1])
     
-    translateButton_1 = CTkButton(easy_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
+    translateButton_1 = CTkButton(easy_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("black", "white"), text= lang["translateButton"], command= lambda: translate())
     translateButton_1.pack()
     translateButton_1.place(x = 1000, y = 520)
 
@@ -390,7 +484,7 @@ def selectedMedium():
     notifyLabel_2.pack()
     notifyLabel_2.place(x = 330, y = 100)
     
-    startButton_2 = CTkButton(medium_frame, width= 140, height= 28, text= lang["medbut"][0], font= ("Times New Roman", 40), fg_color= ("cyan", "blue"), text_color= ("Black", "White"), command=lambda: print("Beta 1"))
+    startButton_2 = CTkButton(medium_frame, width= 140, height= 28, text= lang["medbut"][0], font= ("Times New Roman", 40), fg_color= ("cyan", "blue"), text_color= ("black", "white"), command=lambda: print("Beta 1"))
     startButton_2.pack()
     startButton_2.place(x= 1024, y= 620)
     
@@ -406,7 +500,7 @@ def selectedMedium():
         notifyLabel_2.configure(text= lang["medsel"][1])
         backButton_2.configure(text= lang["goBackButton"][1])
     
-    translateButton_2 = CTkButton(medium_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
+    translateButton_2 = CTkButton(medium_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("black", "white"), text= lang["translateButton"], command= lambda: translate())
     translateButton_2.pack()
     translateButton_2.place(x = 1000, y = 520)
 
@@ -435,7 +529,7 @@ def selectedHard():
     notifyLabel_3.pack()
     notifyLabel_3.place(x = 330, y = 100)
     
-    startButton_3 = CTkButton(hard_frame, width= 140, height= 28, text= lang["hdbut"][0], font= ("Times New Roman", 40), fg_color= ("cyan", "blue"), text_color= ("Black", "White"), command=lambda: print("Beta 1"))
+    startButton_3 = CTkButton(hard_frame, width= 140, height= 28, text= lang["hdbut"][0], font= ("Times New Roman", 40), fg_color= ("cyan", "blue"), text_color= ("black", "white"), command=lambda: print("Beta 1"))
     startButton_3.pack()
     startButton_3.place(x= 1024, y= 620)
     
@@ -451,7 +545,7 @@ def selectedHard():
         notifyLabel_3.configure(text= lang["hdsel"][1])
         backButton_3.configure(text= lang["goBackButton"][1])
     
-    translateButton_3 = CTkButton(hard_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
+    translateButton_3 = CTkButton(hard_frame, width= 140, height= 28, bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= ("black", "white"), text= lang["translateButton"], command= lambda: translate())
     translateButton_3.pack()
     translateButton_3.place(x = 1000, y = 520)
 
@@ -480,7 +574,7 @@ def selectedInsane():
     notifyLabel_4.pack()
     notifyLabel_4.place(x = 330, y = 100)
     
-    startButton_4 = CTkButton(insane_frame, width= 140, height= 28, text= lang["insanebut"][0], font= ("Times New Roman", 40), fg_color= ("cyan", "blue"), text_color= ("Black", "White"), command= lambda: print("Beta 1"))
+    startButton_4 = CTkButton(insane_frame, width= 140, height= 28, text= lang["insanebut"][0], font= ("Times New Roman", 40), fg_color= ("cyan", "blue"), text_color= ("black", "white"), command= lambda: print("Beta 1"))
     startButton_4.pack()
     startButton_4.place(x= 1024, y= 620)
     
@@ -496,7 +590,7 @@ def selectedInsane():
         notifyLabel_4.configure(text= lang["insaneel"][1])
         backButton_4.configure(text= lang["goBackButton"][1])
     
-    translateButton_4 = CTkButton(insane_frame, width= 140, height= 28, bg_color= "red", fg_color= ("cyan", "blue"), text_color= ("Black", "White"), text= lang["translateButton"], command= lambda: translate())
+    translateButton_4 = CTkButton(insane_frame, width= 140, height= 28, bg_color= "red", fg_color= ("cyan", "blue"), text_color= ("black", "white"), text= lang["translateButton"], command= lambda: translate())
     translateButton_4.pack()
     translateButton_4.place(x = 1000, y = 520)
 
@@ -510,6 +604,7 @@ def Newbie_Mode():
     global small_Newbie_Frame
     global Newbie_Title_Mode
     global Newbie_label_Mode
+    global Next_Page_1
     
     beginner_frame.destroy()
     
@@ -523,6 +618,8 @@ def Newbie_Mode():
     Newbie_Frame.propagate(False)
     
     #Move the location of the main window and increase it's height. 1386x100 = width and height, +350 and +0 = the location of the window
+    first_location = f"+{root.winfo_x()}+{root.winfo_y()}"
+    print(first_location)
     root.geometry("1386x1000+350+0")
 
     small_Newbie_Frame = CTkFrame(NB_Page1, width= 1290, height= 200, corner_radius= 10)
@@ -531,7 +628,7 @@ def Newbie_Mode():
     small_Newbie_Frame.propagate(False)
     
     #Question or label
-    Newbie_Title_Mode = CTkLabel(Newbie_Frame, font= ("Times New Roman", 40), bg_color= "transparent", text_color= ("Black", "White"), text= "Newbie session")
+    Newbie_Title_Mode = CTkLabel(Newbie_Frame, font= ("Times New Roman", 40), bg_color= "transparent", text_color= ("black", "white"), text= "Newbie session")
     Newbie_Title_Mode.pack()
     
     Newbie_label_Mode = CTkLabel(Newbie_Frame, font= ("Times New Roman", 40), bg_color= ("Grey", "White"), text_color= ("White", "Black"), text= foundation["theAlphabet"], width= 1024, height= 320)
@@ -646,13 +743,21 @@ def Newbie_Mode():
     letter = foundation["Letters"]
     
     def Next_Page_1():
-        global Next_Button
+        global Next_Button_P2
         global A2_Button_P2
         global A3_Button_P2
         global D2_Button_P2
         global E2_Button_P2
         global O2_Button_P2
         global O3_Button_P2
+        global U1_Button_P2
+        
+        global U_Button_P2
+        global V_Button_P2
+        global X_Button_P2
+        global Y_Button_P2
+        global Back_Button_P2
+        global Next_Page_2
         
         NB_Page1.destroy()
         NB_Page2 = CTkFrame(root, width=1386, height= 1000, bg_color= "transparent")
@@ -686,12 +791,172 @@ def Newbie_Mode():
         Frame3.place(x = 50, y= 560)
         
         #Vowel Letters
-        A1_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40))
-        A2_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40))
+        A1_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][0], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command = lambda: sound.play_sound2())
+        A2_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][1], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command = lambda: sound.play_sound3())
+        D1_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][2], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound7())
+        E2_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][3], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound9())
+        O2_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][4], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound18())
+        O3_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][5], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound19())
+        U1_Button_P2 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][6], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound26())
         
+        A1_Button_P2.pack()
+        A2_Button_P2.pack()
+        D1_Button_P2.pack()
+        E2_Button_P2.pack()
+        O2_Button_P2.pack()
+        O3_Button_P2.pack()
+        U1_Button_P2.pack()
         
+        A1_Button_P2.place(x = 20, y = 20)
+        A2_Button_P2.place(x = 500, y = 20)
+        D1_Button_P2.place(x = 980, y = 20)
+        E2_Button_P2.place(x = 20, y = 130)
+        O2_Button_P2.place(x = 500, y = 130)
+        O3_Button_P2.place(x = 980, y = 130)
+        U1_Button_P2.place(x = 20, y = 240)
+        
+        #Non-Vowel Letters
+        U_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][0], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound25())
+        V_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][1], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound27())
+        X_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][2], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound28())
+        Y_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][3], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound29())
+
+        U_Button_P2.pack()
+        V_Button_P2.pack()
+        X_Button_P2.pack()
+        Y_Button_P2.pack()
+        
+        U_Button_P2.place(x = 20, y = 20)
+        V_Button_P2.place(x = 500, y = 20)
+        X_Button_P2.place(x = 980, y = 20)
+        Y_Button_P2.place(x = 20, y = 130)
+        
+        Next_Button_P2 = CTkButton(NB_Page2, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "#154c79"), text_color= "black", text= lang["NextBut"],command= lambda: Next_Page_2())
+        Next_Button_P2.pack()
+        Next_Button_P2.place(x = 1160, y = 940)
+        
+        Back_Button_P2 = CTkButton(NB_Page2, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "#154c79"), text_color= "black", text= lang["goBackButton"][1])
+        Back_Button_P2.pack()
+        Back_Button_P2.place(x = 50, y = 940)
+        
+        def Next_Page_2():
+            global Next_Button_P3
+            global A2_Button_P3
+            global A3_Button_P3
+            global D2_Button_P3
+            global E2_Button_P3
+            global O2_Button_P3
+            global O3_Button_P3
+            global U1_Button_P3
+            
+            global U_Button_P3
+            global V_Button_P3
+            global X_Button_P3
+            global Y_Button_P3
+            global Back_Button_P3
+            global Next_Page_P3
+            
+            NB_Page2.destroy()
+            NB_Page3 = CTkFrame(root, width=1386, height= 1000, bg_color= "transparent")
+            NB_Page3.pack()
+            NB_Page3.propagate(False)
+            
+            Frame1 = CTkFrame(NB_Page3, width= 1286, height= 100)
+            Frame2 = CTkFrame(NB_Page3, width= 1286, height = 300)
+            Frame3 = CTkFrame(NB_Page3, width= 1286, height= 300)
+            
+            Frame1.propagate(False)
+            Frame2.propagate(False)
+            Frame3.propagate(False)
+            
+            Frame1.pack()
+            Frame2.pack()
+            Frame3.pack()
+            
+            TitleLabel = CTkLabel(Frame1, bg_color = "transparent", text_color = ("black", "white"), text = lang["titledumb"], font = ("Times new roman", 60))
+            Vowel_Label = CTkLabel(NB_Page3, text = foundation["Vowel"][1], bg_color = "transparent", fg_color = "transparent", text_color = ("black", "white"), font = ("Times new roman", 20))
+            Non_Vowel_Label =  CTkLabel(NB_Page3, text = foundation["Vowel"][0], bg_color = "transparent", fg_color = "transparent", text_color = ("black", "white"), font = ("Times new roman", 20))
+            
+            TitleLabel.pack()
+            Vowel_Label.pack()
+            
+            Vowel_Label.place(x = 55, y = 165)
+            Non_Vowel_Label.place(x = 45, y = 525)
+            
+            Frame1.place(x = 50, y= 30)
+            Frame2.place(x = 50, y= 200)
+            Frame3.place(x = 50, y= 560)
+            
+            #Vowel Letters
+            A1_Button_P3 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][0], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command = lambda: sound.play_sound2())
+            A2_Button_P3 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][1], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command = lambda: sound.play_sound3())
+            D1_Button_P3 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][2], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound7())
+            E2_Button_P3 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][3], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound9())
+            O2_Button_P3 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][4], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound18())
+            O3_Button_P3 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][5], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound19())
+            U1_Button_P3 = CTkButton(Frame3, font = ("Times new roman", 40, "bold"), text= foundation["Vowel_Letters"][6], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound26())
+            
+            A1_Button_P3.pack()
+            A2_Button_P3.pack()
+            D1_Button_P3.pack()
+            E2_Button_P3.pack()
+            O2_Button_P3.pack()
+            O3_Button_P3.pack()
+            U1_Button_P3.pack()
+            
+            A1_Button_P3.place(x = 20, y = 20)
+            A2_Button_P3.place(x = 500, y = 20)
+            D1_Button_P3.place(x = 980, y = 20)
+            E2_Button_P3.place(x = 20, y = 130)
+            O2_Button_P3.place(x = 500, y = 130)
+            O3_Button_P3.place(x = 980, y = 130)
+            U1_Button_P3.place(x = 20, y = 240)
+            #Non-Vowel Letters
+            U_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][0], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound25())
+            V_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][1], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound27())
+            X_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][2], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound28())
+            Y_Button_P2 = CTkButton(Frame2, font = ("Times new roman", 40, "bold"), text= foundation["Non-Vowel_Letters"][3], text_color= ("White", "Black"), bg_color= "transparent", fg_color = "red", command= lambda: sound.play_sound29())
+
+            U_Button_P2.pack()
+            V_Button_P2.pack()
+            X_Button_P2.pack()
+            Y_Button_P2.pack()
+            
+            U_Button_P2.place(x = 20, y = 20)
+            V_Button_P2.place(x = 500, y = 20)
+            X_Button_P2.place(x = 980, y = 20)
+            Y_Button_P2.place(x = 20, y = 130)
+            
+            Next_Button_P2 = CTkButton(NB_Page3, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "#154c79"), text_color= "black", text= lang["NextBut"],command= lambda: Complete_Foundation())
+            Next_Button_P2.pack()
+            Next_Button_P2.place(x = 1160, y = 940)
+            
+            Back_Button_P2 = CTkButton(NB_Page3, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "#154c79"), text_color= "black", text= lang["goBackButton"][1], command = lambda: Get_Back())
+            Back_Button_P2.pack()
+            Back_Button_P2.place(x = 50, y = 940)
+        
+            def Get_Back():
+                Next_Page_1()
+                NB_Page3.destroy()
+        
+            def Complete_Foundation():
+                with open("Data\\user_achievement.json", 'r') as f:
+                    Achievement = json.load(f)
+                    Achievement["NewbieMode"] = True
+                    with open("Data\\user_achievement.json", 'w') as f2:
+                        json.dump(Achievement, f2)
+                
+                back_sel()
+                root.geometry(f"1386x720{first_location}")
+                NB_Page3.destroy()
+            
+        def Get_Back():
+            Newbie_Mode()
+            NB_Page2.destroy()
+        
+        Back_Button_P2.configure(command= lambda: Get_Back())
     
-    Next_Button = CTkButton(NB_Page1, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "blue"), text_color= "black", text= lang["NextBut"],command= lambda: Next_Page_1())
+    Next_Button = CTkButton(NB_Page1, font= ("Times new roman", 40), bg_color= "transparent", fg_color= ("cyan", "#154c79"), text_color= "black", text= lang["NextBut"],command= lambda: Next_Page_1())
     Next_Button.pack()
     Next_Button.place(x = 1160, y = 940)
     
@@ -723,7 +988,7 @@ def start_quiz_easy():
     except:
         pass
     try:
-        easy_frame.destroy()
+        easy_frame.destroy()  
     except:
         pass
     try:
@@ -859,4 +1124,4 @@ Menu_Exit.pack()
 Menu_Exit.place(x = 400, y = 480)
 
 print(__name__)
-Thread(root.mainloop()).start()
+Thread(root.mainloop(), daemon = True).start()
