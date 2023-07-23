@@ -22,6 +22,7 @@
     "hdbut": ["Đi nào!", "Let's go"],
     "insanebut": ["להתחיל", "start"],
     "NextBut": "Next",
+    "ResolutionComboBox": ["480x680", "1366x768", "1920x1020", "3168x2160"],
 
     "easyMode": "Easy 😊",
     "mediumMode": "Medium 🤔",

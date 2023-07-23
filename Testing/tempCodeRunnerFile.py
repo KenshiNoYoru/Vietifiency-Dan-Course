@@ -1,2 +1,11 @@
-
-            usernameEntryBox.configure(placeholder_text = "Please enter your name!", fg_color = 'red')
+label_t = CTkLabel(root, text=lang['title'], font=('Script MT Bold', 50), bg_color= 'transparent', text_color= "Black")
+    label_t.place(x=350, y=50)
+    label_des = CTkLabel(root, text=lang['description'], font=('Script MT Bold', 25), bg_color='transparent', text_color="Black")
+    label_des.place(x=365, y=140)
+    label1 = CTkLabel(root, text=lang['username_label'], font=('Script MT Bold', 30), bg_color='transparent')
+    label1.place(x=250, y=250)
+    
+    entry1 = CTkEntry(root, font=('Script MT Bold', 30), fg_color= "White", width= 550, height= 50, text_color= "Black", placeholder_text= lang['placeholder_entry1'])
+    entry1.place(x=500, y=250)
+    button1 = CTkButton(root, text='SUBMIT', font=('Script MT Bold', 30), command=difficulty, bg_color= "grey")
+    button1.place(x=600, y=350)

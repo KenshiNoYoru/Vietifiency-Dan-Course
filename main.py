@@ -57,10 +57,19 @@ def options_Form():
     global Appearance
     global Resize
     global goBack
+    global resolutionString
+    global resolutionVar
+    
+    resolution = []
 
+    with open("Data\\user_setting.json", 'r') as reso:
+        resolutionString = json.load(reso)
+    
+    
     Appearance_var = IntVar(value= 0)
     Resize_Var = BooleanVar(value = False)
-    
+    resolutionVar = StringVar()
+
     #LoadSetting
     with open("Data\\user_setting.json", 'r') as data_unloaded:
         data_loaded = json.load(data_unloaded)
@@ -132,18 +141,24 @@ def options_Form():
                     json.dump(data, f)
                 Resize_Var.set(True)
     
+    def change_Resolution():
+        for i in lang["Resolution"]:
+            if resolutionVar.get() == lang["ComboResolutionBox"][i]:
+                root.geometry(f"{resolutionVar.get()}")
+        
+    
     Appearance = CTkSwitch(options_Frame, switch_width= 70, switch_height= 30, text= "Dark Mode", command=checkAppearance_Mode, variable= Appearance_var)
     Appearance.pack()
     Appearance.place(x = 0, y = 20)
+    
+    resoComboBox = CTkComboBox(options_Frame, width= 500, height= 50, values = lang["ResolutionComboBox"], font= ("Times new roman", 50), variable= resolutionVar, command= lambda: change_Resolution())
+    resoComboBox.pack()
+    resoComboBox.place(x = 0, y = 140)
     
     Resize = CTkSwitch(options_Frame, switch_width= 70, switch_height= 30, text= "Resizable", command=check_Resizable, variable= Resize_Var)
     Resize.pack()
     Resize.place(x = 0, y = 90)
 
-#before start
-def At_Start():
-    global Device_Asking_Frame
-    Device_Asking_Frame = CTkFrame(root, width= 200, height= 450)
 
 def Verify_Form():
     global Verify_Frame
@@ -190,7 +205,7 @@ def Verify_Form():
             usernameEntryBox.configure(placeholder_text = "Please enter your name!", fg_color = 'red')
             titleLabel.focus()
             def count_down():
-                target= sleep(1.2)
+                sleep(1.2)
                 usernameEntryBox.configure(placeholder_text = lang["placeholder_entry1"], fg_color= "#071e26", text_color= "white")
                 usernameEntryBox.configure(text_color = "white")
                 titleLabel.focus()
@@ -620,11 +635,11 @@ def Newbie_Mode():
     #Move the location of the main window and increase it's height. 1386x100 = width and height, +350 and +0 = the location of the window
     first_location = f"+{root.winfo_x()}+{root.winfo_y()}"
     print(first_location)
-    root.geometry("1386x1000+350+0")
+    root.geometry("1386x720+350+0")
 
     small_Newbie_Frame = CTkFrame(NB_Page1, width= 1290, height= 200, corner_radius= 10)
     small_Newbie_Frame.pack()
-    small_Newbie_Frame.place(x = 50, y = 700)
+    small_Newbie_Frame.place(x = 50, y = 500)
     small_Newbie_Frame.propagate(False)
     
     #Question or label
@@ -739,6 +754,8 @@ def Newbie_Mode():
     global D2_Button
     global E1_Button
     global E2_Button
+    to_P1 = CTkButton(Newbie_Frame, width= 140, height= 28, bg_color= "red", fg_color= ("cyan", "blue"), text_color= ("black", "white"), text= "Next >>", command= Next_Page_1)
+    to_P1.pack()
     
     letter = foundation["Letters"]
     
@@ -1111,11 +1128,11 @@ def start_quiz_easy():
     quiz = Quiz()
     
 
-Menu_Start = CTkButton(Menu_Frame, width= 500, height= 100, font= ("Comics Sans", 50), text= lang["startButton"], command= Verify_Form)
+Menu_Start = CTkButton(Menu_Frame, width= 500, height= 100, font= ("Comics Sans", 50), text= lang["startButton"], command= lambda: Verify_Form())
 Menu_Start.pack()
 Menu_Start.place(x = 400, y = 200)
 
-Menu_Option = CTkButton(Menu_Frame, width= 500, height= 100, font= ("Comics Sans", 50), text= lang["optionsButton"], command= options_Form)
+Menu_Option = CTkButton(Menu_Frame, width= 500, height= 100, font= ("Comics Sans", 50), text= lang["optionsButton"], command= lambda: options_Form())
 Menu_Option.pack()
 Menu_Option.place(x = 400, y = 350)
 
